@@ -1,27 +1,26 @@
 # Technical Specs
 
-pre-reads:
+In order to understand the implementation aspects, we would recommend you to consider the pre-reads in the following areas:
 
 - [ ]  authentication in ethereum
 - [ ]  simple staking games, voting games
 - [ ]  ERC20 token and gensis
-- [ ]  Ethereum testnet and APIs
+- [ ]  Ethereum APIs & testnet deployments
 
-**Components:**
 
-- Authentication
-- Game center
-- Game
-- Wallet
-- Admin panel
+Starterem Dapp can be abstracted under following core components and their interactons as shown in the architecture diagram below:
 
-**Architecture Overview:**
+- App Server (serving web3 app)
+- Auth Server
+- GraphQL Server
+- Smart Contracts
 
-![](https://www.notion.so/file/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb5f907f0-bd51-453b-a3f9-9de3ed384df3%2FStartereumDappArchitecture.png)
 
-## Components
+![startereum dapp architecture](https://user-images.githubusercontent.com/1164613/40483920-6e7c464a-5f77-11e8-919b-4c0377c5760d.png)
 
-**Authentication**
+# Components
+
+## Authentication
 
 We don't need a pure blockchain based authentication. It is slow and it costs gas. We want to register the user with their public ethereum address and authenticate by proof of ownership of respective registered address.
 
@@ -47,17 +46,18 @@ Our User model consist of following attributes:
 
 Please look at the workflow below:
 
-![](https://www.notion.so/file/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffe5f0bfa-cde5-4073-a11b-d56a87a1460a%2FAuthenticationflow.png)
+![authentication flow](https://user-images.githubusercontent.com/1164613/40483919-6e518cb6-5f77-11e8-8434-27846f9a3fea.png)
+
 
 helpful reads: 
 
 [One-click Login with Blockchain: A MetaMask Tutorial](https://www.toptal.com/ethereum/one-click-login-flows-a-metamask-tutorial)
 
-# Game Smart Contract
+## Smart Contract
 
-Startereum is an ERC20 token used for staking in the project matches. The game is described in the [TWR Concept Note](TWR Concept.doc).
+Startereum is an ERC20 token used for staking in the project matches. The game is described in the TWR Concept in the root directory.
 
-## Overview
+### Overview
 
 1. A `wave` is a tournament style format for creating the ranked list of projects and consists of `matches`. The number of matches depends on the new projects participating in the wave. Generally for a one-to-one comparison, for N projects in a wave there will be N*(N-1)/2 number of matches.
 2. A `match` is a staking game between two project on a single dimension. A match starts with default parameters such as `minStake`, `maxStake`, `threshold`, `endTime` but can be changed if desired. 
@@ -70,7 +70,7 @@ Startereum is an ERC20 token used for staking in the project matches. The game i
 9. If the staking preference `tag` is not set, then the staking request is rejected and the value is returned.
 10. Staking preference is done by setting `tag` to one of the endorsed hashes of the match. 
 
-## Reward Calculations
+### Reward Calculations
 
 1. The contract implements the following functions to trigger rewards: `find_winner`, `calc_rewards`, `distribute_rewards`.
 2. `find_winner` figures out which of the endorsed hashes won the majority of tokens
@@ -89,7 +89,7 @@ Startereum is an ERC20 token used for staking in the project matches. The game i
     3. else, it calculates the reward: R using the above formulation
     4. It then calls `distribute_reward` with the following value of `T`: 
 
-          n(i) + n(i) * L / W 
+        `n(i) + n(i) * L / W`
 
 5. `distribute_rewards` sends the desired tokens back to the originating staking addresses with the above calculations
 
@@ -99,7 +99,7 @@ Startereum is an ERC20 token used for staking in the project matches. The game i
 - *The house fee needs to be factored before rewarding the winners*
 - *The ethereum gas fee needs to be factored in rewarding the winners*
 
-## Functions
+### Smart Contract Functions
 
 Below are the high level functions that are part of the Startereum smart contract. I have also proposed some design patterns inspired by [Numerai]([https://github.com/numerai/contract](https://github.com/numerai/contract)), [StakeBank]([https://github.com/HarbourProject/stakebank](https://github.com/HarbourProject/stakebank)) and [EIP 900: Simple Staking Interface]([https://github.com/ethereum/EIPs/issues/900](https://github.com/ethereum/EIPs/issues/900)).
 
@@ -157,29 +157,28 @@ Below are the high level functions that are part of the Startereum smart contrac
 
 **Inspection functions**
 
-Returns the data about wave: Number of matches, List of matches, List of project tags
+- Returns the data about wave: Number of matches, List of matches, List of project tags
 
 `getWave(uint256 _waveID)`
 
-- `_waveID` the ID that represent the wave
 
-Returns the data about match: participating project tags, ending time of the match, status of the match
+- Returns the data about match: participating project tags, ending time of the match, status of the match
 
 `getMatch(uint256 _waveID, uint256 _matchID)`
 
-Returns the status of the match: 0 ended, 1 live
+- Returns the status of the match: 0 ended, 1 live
 
 `getMatchStatus(uint256 _waveID, uint256 _matchID)`
 
-Returns the result of the match: tokens staked for both project tags (tokensForTagA, tokensForTagB), Winner tag value
+- Returns the result of the match: tokens staked for both project tags (tokensForTagA, tokensForTagB), Winner tag value
 
 `getMatchResults(uint256 _waveID, uint256 _matchID)`
 
-Returns the staked value corresponding to an address in a match: stakedValue
+- Returns the staked value corresponding to an address in a match: stakedValue
 
 `getStakeFor(uint256 _waveID, uint256 _matchID, address _staker, bytes32 _tag)`
 
-Returns the reward value corresponding to an address in a match: rewardValue
+- Returns the reward value corresponding to an address in a match: rewardValue
 
 `getRewardFor(uint256 _waveID, uint256 _matchID, address _staker, bytes32 _tag)`
 
@@ -196,13 +195,10 @@ The following events are emitted from the contracts. The events is a good way to
 
 **Design pattern**
 
-/Contracts
-
-StartereumBackend.sol
-
-StartereumDelegate.sol
-
-StartereumShared.sol
+Contracts
+- StartereumBackend.sol
+- StartereumDelegate.sol
+- StartereumShared.sol
 
 `StartereumShared` implement data structures that will be used in the other smart contracts mainly `StartereumBackend` and `StartereumDelegate`
 
@@ -210,7 +206,7 @@ StartereumShared.sol
 
 `StartereumBackend` implements basic ERC20 functionalities such as transfer, minting, withdraw etc, and also creates interfaces for staking match operations via `StartereumDelegate` contract methods. The delegate contract can be upgraded but the backend contract is immutable.
 
-## Storage and APIs
+## GraphQL Server
 
 Since, we are writing directly on contracts, we will use the contract events to populate data models. It is recommended to use graphQL as the data serving layer as the project will be evolving fast to update existing models or add new models.
 
