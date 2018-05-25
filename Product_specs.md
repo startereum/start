@@ -1,3 +1,10 @@
+---
+title: Product Specs - Objective, User Stories
+release: Alpha
+type: Meta
+created: 2018-05-24
+---
+
 # Product Specs
 
 ## Introduction
@@ -116,7 +123,7 @@ As a player,
 
 ![wallet](https://user-images.githubusercontent.com/1164613/40267160-9065be40-5b75-11e8-96ea-4ade17b065da.png)
 
-**Analytics**
+**Analytics[WIP]**
 
 Analytics are a crucial component of the game engine. It helps us figure how are the members playing the game. Remember the current game design is a zero sum game. Which means people win from people and people lose to people, and this requires us to look at different parameters to measure the game health - repeatability and predictability.
 
@@ -124,13 +131,8 @@ With repeatability, we would like to know if players are coming back for new gam
 
 With predictability, we would like to know if players are becoming good over a time improving their earnings and human algorithms (in this case ranking). Other way to ask the same metric is to figure how many players must participate in the games to get a trusted algorithm.
 
-As an admin,
 
-1. I should be able to create an airdrop contract
-2. I should be able to see the token distribution stats
-3. I should be able to see the game and player stats
-
-**Integrations**
+**Integrations[WIP]**
 
 * Customer support.
 * Email notifications.

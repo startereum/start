@@ -1,3 +1,10 @@
+---
+title: Technical Specs - Architecture, Components, Smart Contracts
+release: Alpha
+type: Meta
+created: 2018-05-24
+---
+
 # Technical Specs
 
 In order to understand the implementation aspects, we would recommend you to consider the pre-reads in the following areas:
