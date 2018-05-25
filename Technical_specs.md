@@ -75,21 +75,19 @@ Startereum is an ERC20 token used for staking in the project matches. The game i
 1. The contract implements the following functions to trigger rewards: `find_winner`, `calc_rewards`, `distribute_rewards`.
 2. `find_winner` figures out which of the endorsed hashes won the majority of tokens
 3. This is how we define the reward formula:
-  1. lets suppose a playerA sent `n` tokens to the later concluded winning side 
-  2. lets suppose win:lose is W:L in token volume
-  3. lets suppose `n` token staked by playerA is `p%` of the total winning token, i.e `n/W*100`
-  4. then playerA is supposed to win `p%` of `L`, i.e `p/100*L`
-  5. the reward (`R`) for each winning participant will be `n(i) * L / W`, where `i` represents each unique participant
-  6. the total tokens (stake + reward, `T`) to be sent back to a winning participant will be `n(i) + n(i) * L / W`
+    - lets suppose a playerA sent `n` tokens to the later concluded winning side 
+    - lets suppose win:lose is W:L in token volume
+    - lets suppose `n` token staked by playerA is `p%` of the total winning token, i.e `n/W*100`
+    - then playerA is supposed to win `p%` of `L`, i.e `p/100*L`
+    - the reward (`R`) for each winning participant will be `n(i) * L / W`, where `i` represents each unique participant
+    - the total tokens (stake + reward, `T`) to be sent back to a winning participant will be `n(i) + n(i) * L / W`
 4. `calc_rewards` works in the following way:
-  1. iterates through all the addresses that staked to the contract.
-  2. In each iteration,
-    1. it checks if the stake is in favour of winning token determined earlier using `find_winner` or not
-    2. if it is not a winning address, then it skips to the next iteration
-    3. else, it calculates the reward: R using the above formulation
-    4. It then calls `distribute_reward` with the following value of `T`: 
-
-        `n(i) + n(i) * L / W`
+    - iterates through all the addresses that staked to the contract.
+    - In each iteration,
+      - it checks if the stake is in favour of winning token determined earlier using `find_winner` or not
+      - if it is not a winning address, then it skips to the next iteration
+      - else, it calculates the reward: R using the above formulation
+      - It then calls `distribute_reward` with the following value of `T`:  `n(i) + n(i) * L / W`
 
 5. `distribute_rewards` sends the desired tokens back to the originating staking addresses with the above calculations
 
@@ -101,7 +99,7 @@ Startereum is an ERC20 token used for staking in the project matches. The game i
 
 ### Smart Contract Functions
 
-Below are the high level functions that are part of the Startereum smart contract. I have also proposed some design patterns inspired by [Numerai]([https://github.com/numerai/contract](https://github.com/numerai/contract)), [StakeBank]([https://github.com/HarbourProject/stakebank](https://github.com/HarbourProject/stakebank)) and [EIP 900: Simple Staking Interface]([https://github.com/ethereum/EIPs/issues/900](https://github.com/ethereum/EIPs/issues/900)).
+Below are the high level functions that are part of the Startereum smart contract. I have also proposed some design patterns inspired by [Numerai](https://github.com/numerai/contract), [StakeBank](https://github.com/HarbourProject/stakebank) and [EIP 900: Simple Staking Interface](https://github.com/ethereum/EIPs/issues/900).
 
 **player functions**
 
