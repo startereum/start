@@ -1,24 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @aayush-ai Sign out
-0
-7 0 Andrii-D/telegram-stepfunctions-bot
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
-telegram-stepfunctions-bot/serverless.yml
-1c998a7  on 19 Nov 2017
-@Andrii-D Andrii-D first commit
-     
-137 lines (125 sloc)  3.89 KB
-service: telegram-stepfunction-bot
-
-frameworkVersion: ">=1.2.0 <2.0.0"
-
 provider:
   name: aws
   runtime: python3.6
